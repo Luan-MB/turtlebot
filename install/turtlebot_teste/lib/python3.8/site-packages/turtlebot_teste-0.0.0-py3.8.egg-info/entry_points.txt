@@ -1,0 +1,7 @@
+[console_scripts]
+laser = turtlebot_teste.laser:main
+listener = turtlebot_teste.subscriber:main
+movimenta = turtlebot_teste.movimenta:main
+talker = turtlebot_teste.publisher:main
+turtlebot = turtlebot_teste.turtlebot:main
+
