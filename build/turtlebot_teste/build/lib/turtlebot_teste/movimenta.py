@@ -4,6 +4,8 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
+VEL_LINEAR = 0.1
+VEL_ANGULAR = 0.4
 TIME_90 = 15.7079576513
 ESQUERDA = "esquerda"
 DIREITA = "direita"
@@ -25,25 +27,25 @@ class VelocidadePub(Node):
 
     def movimenta(self):
         move_cmd = Twist()
-        move_cmd.linear.x = 0.1
+        move_cmd.linear.x = VEL_LINEAR
         move_cmd.angular.z = 0.0
 
         self.velocity_publisher.publish(move_cmd)
-        self.get_logger().info('Andando para frente com velocidade 0.1')
+        self.get_logger().info(f'Andando para frente com velocidade {VEL_LINEAR}')
 
     def rotaciona(self, dir):
         move_cmd = Twist()
         move_cmd.linear.x = 0.0
         if (dir == ESQUERDA):
-            move_cmd.angular.z = 0.2
+            move_cmd.angular.z = VEL_ANGULAR
         elif (dir == DIREITA):
-            move_cmd.angular.z = -0.2
+            move_cmd.angular.z = -VEL_ANGULAR
         else:
             self.get_logger().info('Direção inválida para rotação')
             return False
 
         self.velocity_publisher.publish(move_cmd)
-        self.get_logger().info(f'Girando para {dir} com velocidade 0.1')
+        self.get_logger().info(f'Girando para {dir} com velocidade {VEL_ANGULAR}')
 
     def para(self):
         move_cmd = Twist()
@@ -55,7 +57,7 @@ class VelocidadePub(Node):
 
     def rotaciona_90(self, dir):
         self.rotaciona(dir)
-        sleep(TIME_90/2)
+        sleep(TIME_90/4)
         self.para()
 
 class LaserSub(Node):
@@ -89,7 +91,7 @@ def main(args=None):
 
     while(True):
         rclpy.spin_once(laser)
-        print(f'Laser Sudeste: {laser.sudeste}')
+        print(f'Laser Leste: {laser.leste}')
         if(laser.leste > 0.4):
             sleep(1)
             velocidade.para()
